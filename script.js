@@ -208,7 +208,6 @@ function searchId() {
     }
 }
 
-
 function sortProduct() {
 	var productList;
 	let sortingValue = document.getElementById("sorting").value;
