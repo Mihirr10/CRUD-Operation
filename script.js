@@ -22,7 +22,7 @@ function validateForm() {
 
 
     let isNameReg = /^[A-Za-z]+$/;
-    if (!name.match(isNameReg)) {
+     if(!name.match(isNameReg)) {
         html += "please add string in the Product Name"
         html += newLine;
         flag = false;
@@ -71,7 +71,14 @@ function validateForm() {
 }
 //Show data in table
 function showData() {
-    let productList = JSON.parse(localStorage.getItem("productList"));
+  let productList;
+    if (localStorage.getItem("productList") == null) {
+        productList = [];
+    }
+    else {
+        productList = JSON.parse(localStorage.getItem('productList'));
+    }
+
     let table = document.getElementById("table-body");
     let html = "";
     productList.forEach(function (element, index) {
@@ -168,7 +175,7 @@ function update(index) {
 //Remove Product Data
 function remove(index) {
 
-    if(confirm("Are you sure ??")){
+    if(confirm("Are you sure?")){
         var productList = JSON.parse(localStorage.getItem('productList'));
         productList.splice(index, 1);
         localStorage.setItem("productList", JSON.stringify(productList));
@@ -185,6 +192,14 @@ function remove(index) {
    
 
 }
+
+function clearAllData() {
+	localStorage.clear();
+	showData();
+    console.log('hfjfj')
+
+}
+
 function pressed() {
     document.getElementById("imagename").innerHTML = document.getElementById("image").value.replace("C:\\fakepath\\", "");
 }
@@ -207,6 +222,8 @@ function searchId() {
         }
     }
 }
+
+
 
 function sortProduct() {
 	var productList;
