@@ -208,48 +208,7 @@ function searchId() {
     }
 }
 
-// //Sort our Data
-// var direction = false;
-// function sortColumnByName(columnName) {
-//     direction = !direction;
-//     var productList = JSON.parse(localStorage.getItem('productList'));
-//     productList = productList.sort(function (a, b) {
-//         if (direction) {
-//             if (a[columnName].toLowerCase() < b[columnName].toLowerCase()) {
-//                 return -1;
-//             }
-//         }
-//         else {
-//             if (a[columnName].toLowerCase() > b[columnName].toLowerCase()) {
-//                 return -1;
-//             }
-//         }
-//     });
-//     localStorage.setItem("productList", JSON.stringify(productList));
-//     showData();
 
-// }
-// function sortColumnByNum(columnName) {
-//     direction = !direction;
-//     var productList = JSON.parse(localStorage.getItem('productList'));
-
-//     if (direction) {
-//         productList = productList.sort(function (a, b) {
-//             return a[columnName] - b[columnName];
-//         });
-//     }
-//     else {
-//         productList = productList.sort(function (a, b) {
-//             return b[columnName] - a[columnName];
-//         });
-//     }
-//     localStorage.setItem("productList", JSON.stringify(productList));
-//     showData();
-
-// };
-
-
-// Function Of Sorting Data By Id, Name And Price 
 function sortProduct() {
 	var productList;
 	let sortingValue = document.getElementById("sorting").value;
