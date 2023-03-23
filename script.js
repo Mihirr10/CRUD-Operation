@@ -6,7 +6,7 @@ function validateForm() {
     let price = document.getElementById("price").value;
     let description = document.getElementById("description").value;
     let html = ""
-    let isPriceReg = /\d/;
+    let isPriceReg = /\d+$/;
     let isNameReg = /^[A-Za-z ]+$/;
     let isIdReg = /^\d{4}$/;
     let isNumber = function (num) {
