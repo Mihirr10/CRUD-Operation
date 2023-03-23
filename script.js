@@ -2,87 +2,87 @@
 function validateForm() {
     let id = document.getElementById("id").value;
     let name = document.getElementById("name").value;
-    let image = document.getElementById("imagename").innerHTML;
+    let image = document.getElementById("image").files;
     let price = document.getElementById("price").value;
     let description = document.getElementById("description").value;
     let html = ""
     let isPriceReg = /\d/;
-	let isNameReg = /^[A-Za-z ]+$/;
+    let isNameReg = /^[A-Za-z ]+$/;
     let isIdReg = /^\d{4}$/;
     let isNumber = function (num) {
         var pattern = /^\d+$/;
         return pattern.test(num);
     }
     if (id == "") {
-		alert("Id must be filled out");
-		return false;
-	}
+        alert("Id must be filled out");
+        return false;
+    }
 
-    
+
     else if (!id.match(isIdReg)) {
         alert("ID must be 4 digit");
         return false;
     }
-  
-	
-	else if (id == "") {
-		alert("Id must be filled out");
-		return false;
-	}
-
-	else if (!id.match(isIdReg)) {
-		alert("ID must be 4 digit");
-		return false;
-	}
-	
-
-	else if (name == "") {
-		alert("Product Name must be filled out");
-		return false;
-	}
-    else if(!name.match(isNameReg)){
-		alert("Must be Alphabet allowed");
-		return false;
-	}
-	else if (image.length == "") {
-		alert("image must be filled out");
-		return false;
-	}
 
 
-	else if (price == "") {
-		alert("Price must be filled out");
-		return false;
-	}
+    else if (id == "") {
+        alert("Id must be filled out");
+        return false;
+    }
 
-	else if (!price.match(isPriceReg)) {
-		alert("Price must be in Number");
-		return false;
-	}
+    else if (!id.match(isIdReg)) {
+        alert("ID must be 4 digit");
+        return false;
+    }
 
-	else if (price < 0) {
-		alert("Price must be positive");
-		return false;
-	}
 
-	else if (description == "") {
-		alert("Description must be filled out");
-		return false;
-	}
+    else if (name == "") {
+        alert("Product Name must be filled out");
+        return false;
+    }
+    else if (!name.match(isNameReg)) {
+        alert("Must be Alphabet allowed");
+        return false;
+    }
+    else if (image.length == "") {
+        alert("image must be filled out");
+        return false;
+    }
 
-	else {
-		return true;
-	}
+
+    else if (price == "") {
+        alert("Price must be filled out");
+        return false;
+    }
+
+    else if (!price.match(isPriceReg)) {
+        alert("Price must be in Number");
+        return false;
+    }
+
+    else if (price < 0) {
+        alert("Price must be positive");
+        return false;
+    }
+
+    else if (description == "") {
+        alert("Description must be filled out");
+        return false;
+    }
+
+    else {
+        return true;
+    }
 
 
 }
 
 
-	
+
 
 //Show data in table
 function showData() {
-  let productList;
+    let productList;
     if (localStorage.getItem("productList") == null) {
         productList = [];
     }
@@ -118,10 +118,10 @@ function addProduct() {
         let description = document.getElementById("description").value;
         var productList;
 
-        const fr=new FileReader();
+        const fr = new FileReader();
         fr.readAsDataURL(image)
-        fr.addEventListener('load',()=>{
-            let url=fr.result;
+        fr.addEventListener('load', () => {
+            let url = fr.result;
             if (localStorage.getItem("productList") == null) {
                 productList = [];
             }
@@ -137,24 +137,28 @@ function addProduct() {
             });
             localStorage.setItem("productList", JSON.stringify(productList));
             showData();
-            document.getElementById("id").value = "";
-            document.getElementById("name").value = "";
-            document.getElementById("imagename").innerHTML = "";
-            document.getElementById("price").value = "";
-            document.getElementById("description").value = "";
+             location.reload();
 
         })
-       
+
     }
 }
 
 
 //Edit Product Data
 function update(index) {
+
+    if (localStorage.getItem("productList") == null) {
+        productList = [];
+    }
+    else {
+        productList = JSON.parse(localStorage.getItem('productList'));
+    }
+
     var row = JSON.parse(localStorage.getItem("productList"))[index];
     document.getElementById("id").value = row.id;
     document.getElementById("name").value = row.name;
-    document.getElementById("imagename").innerHTML = row.image;
+    document.getElementById("image").files[0] = row.image;
     document.getElementById("price").value = row.price;
     document.getElementById("description").value = row.description;
     document.getElementById("submit").style.display = "none";
@@ -162,31 +166,36 @@ function update(index) {
 
 
     document.querySelector("#update").onclick = function () {
+        let image1=document.getElementById("image").files;
+       
         if (validateForm() == true) {
+            if(image1.length == ""){
+                alert("image must be filled out");
+            }
+
             let id = document.getElementById("id").value;
             let name = document.getElementById("name").value;
-            let img = document.getElementById("image");
-            if (img.onchange == true && img.value != null) {
-                pressed();
-            }
-            let image = document.getElementById("imagename").innerHTML;
+            let img = document.getElementById("image").files[0];
+            
             let price = document.getElementById("price").value;
             let description = document.getElementById("description").value;
             var productList = JSON.parse(localStorage.getItem('productList'));
-            productList[index].id = id;
-            productList[index].name = name;
-            productList[index].image = image;
-            productList[index].price = price;
-            productList[index].description = description;
-            localStorage.setItem("productList", JSON.stringify(productList));
-            showData();
+            const fr = new FileReader();
+            fr.readAsDataURL(img)
+            fr.addEventListener('load', () => {
+                let url = fr.result;
+                productList[index].id = id;
+                productList[index].name = name;
+                productList[index].image = url;
+                productList[index].price = price;
+                productList[index].description = description;
+                localStorage.setItem("productList", JSON.stringify(productList));
+                showData();
+            })
             document.getElementById("submit").style.display = "block";
             document.getElementById("update").style.display = "none";
-            document.getElementById("id").value = "";
-            document.getElementById("name").value = "";
-            document.getElementById("imagename").innerHTML = "";
-            document.getElementById("price").value = "";
-            document.getElementById("description").value = "";
+            location.reload();
+        
         }
     }
 
@@ -194,7 +203,7 @@ function update(index) {
 //Remove Product Data
 function remove(index) {
 
-    if(confirm("Are you sure?")){
+    if (confirm("Are you sure?")) {
         var productList = JSON.parse(localStorage.getItem('productList'));
         productList.splice(index, 1);
         localStorage.setItem("productList", JSON.stringify(productList));
@@ -208,20 +217,21 @@ function remove(index) {
         document.getElementById("description").value = "";
 
     }
-   
+
 
 }
 
 //function for clearing all data
 function clearAllData() {
-	localStorage.clear();
-	showData();
-  
+    localStorage.clear();
+    showData();
+
 
 }
 
 function pressed() {
     document.getElementById("imagename").innerHTML = document.getElementById("image").value.replace("C:\\fakepath\\", "");
+    
 }
 
 //Filter By Id
@@ -246,45 +256,45 @@ function searchId() {
 
 //function for sortig the data
 function sortProduct() {
-	var productList;
-	let sortingValue = document.getElementById("sorting").value;
-	if (localStorage.getItem("productList") == null) {
-		productList = [];
-	}
-	else {
-		productList = JSON.parse(localStorage.getItem("productList"));
-	}
+    var productList;
+    let sortingValue = document.getElementById("sorting").value;
+    if (localStorage.getItem("productList") == null) {
+        productList = [];
+    }
+    else {
+        productList = JSON.parse(localStorage.getItem("productList"));
+    }
 
-	switch (sortingValue) {
-		case "p_id":
-			productList.sort(byProductId);
-			break;
-		case "p_name":
-			productList.sort(byProductName);
-			break;
-		case "p_price":
-			productList.sort(byProductPrice);
-	}
-	localStorage.setItem("productList", JSON.stringify(productList));
-	location.reload();
-	showData();
+    switch (sortingValue) {
+        case "p_id":
+            productList.sort(byProductId);
+            break;
+        case "p_name":
+            productList.sort(byProductName);
+            break;
+        case "p_price":
+            productList.sort(byProductPrice);
+    }
+    localStorage.setItem("productList", JSON.stringify(productList));
+    location.reload();
+    showData();
 }
 
 
 function byProductId(a, b) {
-	return a.id - b.id;
+    return a.id - b.id;
 }
 
 function byProductName(a, b) {
-	if (a.name < b.name) {
-		return -1;
-	} else if (a.name > b.name) {
-		return 1;
-	} else {
-		return 0;
-	}
+    if (a.name < b.name) {
+        return -1;
+    } else if (a.name > b.name) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 function byProductPrice(a, b) {
-	return a.price - b.price;
+    return a.price - b.price;
 }
