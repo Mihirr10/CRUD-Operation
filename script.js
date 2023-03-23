@@ -5,70 +5,81 @@ function validateForm() {
     let image = document.getElementById("imagename").innerHTML;
     let price = document.getElementById("price").value;
     let description = document.getElementById("description").value;
-    let flag = true;
     let html = ""
-    var newLine = "\r\n"
+    let isPriceReg = /\d/;
+	let isNameReg = /^[A-Za-z ]+$/;
+    let isIdReg = /^\d{4}$/;
     let isNumber = function (num) {
         var pattern = /^\d+$/;
         return pattern.test(num);
     }
+    if (id == "") {
+		alert("Id must be filled out");
+		return false;
+	}
 
-    let isIdReg = /^\d{4}$/;
-    if (!id.match(isIdReg)) {
-        html += "ID must be 4 digit"
-        html += newLine;
-        flag = false;
+    
+    else if (!id.match(isIdReg)) {
+        alert("ID must be 4 digit");
+        return false;
     }
+  
+	
+	else if (id == "") {
+		alert("Id must be filled out");
+		return false;
+	}
+
+	else if (!id.match(isIdReg)) {
+		alert("ID must be 4 digit");
+		return false;
+	}
+	
+
+	else if (name == "") {
+		alert("Product Name must be filled out");
+		return false;
+	}
+    else if(!name.match(isNameReg)){
+		alert("Must be Alphabet allowed");
+		return false;
+	}
+	else if (image.length == "") {
+		alert("image must be filled out");
+		return false;
+	}
 
 
-    let isNameReg = /^[A-Za-z]+$/;
-     if(!name.match(isNameReg)) {
-        html += "please add string in the Product Name"
-        html += newLine;
-        flag = false;
-    }
+	else if (price == "") {
+		alert("Price must be filled out");
+		return false;
+	}
 
+	else if (!price.match(isPriceReg)) {
+		alert("Price must be in Number");
+		return false;
+	}
 
-    if (!isNumber(id)) {
-        html += "Enter only number";
-        html += newLine;
-        flag = false;
-    }
-    if (name == "") {
-        html += "Product Name is required";
-        html += newLine;
-        flag = false;
-    }
-    if (image == "") {
-        html += "Please Upload Image";
-        html += newLine;
-        flag = false;
-    }
-    else {
-        var Extension = image.substring(image.lastIndexOf('.') + 1).toLowerCase();
-        if (!(Extension == "png" || Extension == "jpeg" || Extension == "jpg")) {
-            html += "upload only jpg,jpeg and png file";
-            html += newLine;
-            flag = false;
-        }
-    }
-    if (!isNumber(price)) {
-        html += "Please Enter valid price!";
-        html += newLine;
-        flag = false;
-    }
-    if (description == "") {
-        html += "Description is required!";
-        html += newLine;
-        flag = false;
-    }
-    if (flag == false) {
-        alert(html);
-    }
-    return flag;
+	else if (price < 0) {
+		alert("Price must be positive");
+		return false;
+	}
+
+	else if (description == "") {
+		alert("Description must be filled out");
+		return false;
+	}
+
+	else {
+		return true;
+	}
 
 
 }
+
+
+	
+
 //Show data in table
 function showData() {
   let productList;
@@ -85,7 +96,7 @@ function showData() {
         html += "<tr>";
         html += "<td>" + element.id + "</td>";
         html += "<td>" + element.name + "</td>";
-        html += "<td><img src='images/" + element.image + "' width='30px' height='30px'/></td>";
+        html += "<td><img src='" + element.image + "' width='30px' height='30px'/></td>";
         html += "<td>" + element.price + "</td>";
         html += "<td>" + element.description + "</td>";
         html += "<td><button type='button' class='btn btn-secondary' onclick='update(" + index + ")'>Edit</button><button type='button' class='btn btn-danger'onclick='remove(" + index + ")'>Delete</button></td>";
@@ -102,30 +113,38 @@ function addProduct() {
     if (validateForm() == true) {
         let id = document.getElementById("id").value;
         let name = document.getElementById("name").value;
-        let image = document.getElementById("image").files[0].name;
+        let image = document.getElementById("image").files[0];
         let price = document.getElementById("price").value;
         let description = document.getElementById("description").value;
         var productList;
-        if (localStorage.getItem("productList") == null) {
-            productList = [];
-        }
-        else {
-            productList = JSON.parse(localStorage.getItem('productList'));
-        }
-        productList.push({
-            id: id,
-            name: name,
-            image: image,
-            price: price,
-            description: description
-        });
-        localStorage.setItem("productList", JSON.stringify(productList));
-        showData();
-        document.getElementById("id").value = "";
-        document.getElementById("name").value = "";
-        document.getElementById("imagename").innerHTML = "";
-        document.getElementById("price").value = "";
-        document.getElementById("description").value = "";
+
+        const fr=new FileReader();
+        fr.readAsDataURL(image)
+        fr.addEventListener('load',()=>{
+            let url=fr.result;
+            if (localStorage.getItem("productList") == null) {
+                productList = [];
+            }
+            else {
+                productList = JSON.parse(localStorage.getItem('productList'));
+            }
+            productList.push({
+                id: id,
+                name: name,
+                image: url,
+                price: price,
+                description: description
+            });
+            localStorage.setItem("productList", JSON.stringify(productList));
+            showData();
+            document.getElementById("id").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("imagename").innerHTML = "";
+            document.getElementById("price").value = "";
+            document.getElementById("description").value = "";
+
+        })
+       
     }
 }
 
