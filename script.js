@@ -212,10 +212,11 @@ function remove(index) {
 
 }
 
+//function for clearing all data
 function clearAllData() {
 	localStorage.clear();
 	showData();
-    console.log('hfjfj')
+  
 
 }
 
@@ -243,7 +244,7 @@ function searchId() {
 }
 
 
-
+//function for sortig the data
 function sortProduct() {
 	var productList;
 	let sortingValue = document.getElementById("sorting").value;
